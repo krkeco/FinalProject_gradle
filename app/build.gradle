@@ -1,6 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
+        dexOptions {
+            javaMaxHeapSize "4g"
+
+    }
     compileSdkVersion 25
     buildToolsVersion "24.0.3"
 

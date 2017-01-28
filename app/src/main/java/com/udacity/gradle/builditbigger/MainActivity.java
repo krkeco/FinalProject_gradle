@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "Manfred"));
+
     }
 
     @Override
@@ -61,8 +66,6 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("joke",joke);
         MainActivity.this.startActivity(intent);
 
-        new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "Manfred"));
-
     }
     class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> {
         private MyApi myApiService = null;
@@ -71,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Pair<Context, String>... params) {
             if(myApiService == null) {  // Only do this once
+                Log.v("krkeco","making myapiservice");
                 MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                         new AndroidJsonFactory(), null)
                         // options for running against local devappserver
@@ -92,14 +96,17 @@ public class MainActivity extends AppCompatActivity {
             String name = params[0].second;
 
             try {
+                Log.v("krkeco","got through the connection?");
                 return myApiService.sayHi(name).execute().getData();
             } catch (IOException e) {
+                Log.v("krkeco",e.getMessage()+" error");
                 return e.getMessage();
             }
         }
 
         @Override
         protected void onPostExecute(String result) {
+            Log.v("krkeco","we have a text!: "+result);
             Toast.makeText(context, result, Toast.LENGTH_LONG).show();
         }
     }
