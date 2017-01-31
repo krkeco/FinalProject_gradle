@@ -2,7 +2,6 @@ package com.udacity.gradle.builditbigger;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,26 +13,37 @@ import android.widget.Toast;
 
 import com.example.JokePro;
 import com.example.jokedroid.JokeDroidActivity;
-import com.example.kc.myapplication.backend.myApi.MyApi;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
-import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 
-import java.io.IOException;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 
 public class MainActivity extends AppCompatActivity {
     JokePro jokelib = new JokePro();
+   static Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mContext = getApplicationContext();
 
 
     }
+
+
+
+       public static <T> T echo(T o) {
+            return echo(o, false);
+        }
+
+      public static <T> T echo(T o, boolean log) {
+            if (log) Log.i(MainActivity.class.getName(), o.toString());
+
+            return o;
+        }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -69,7 +79,16 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.this.startActivity(intent);*/
 
     }
-    class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> {
+
+    public static void receiveData(String result){
+        Intent intent = new Intent(mContext, JokeDroidActivity.class);
+        intent.putExtra("joke",result);
+        mContext.startActivity(intent.addFlags(FLAG_ACTIVITY_NEW_TASK));
+
+    }
+/*
+
+     class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> {
         private MyApi myApiService = null;
         private Context context;
 
@@ -107,10 +126,10 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-        //    Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+            //    Toast.makeText(context, result, Toast.LENGTH_LONG).show();
             Intent intent = new Intent(MainActivity.this, JokeDroidActivity.class);
             intent.putExtra("joke",result);
             MainActivity.this.startActivity(intent);
         }
-    }
+    }*/
 }

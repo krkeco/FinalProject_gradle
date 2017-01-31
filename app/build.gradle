@@ -41,6 +41,11 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
+    // Optional -- Mockito framework
+    // NOTE: Do not place your application dependencies here; they belong
+    // in the individual module build.gradle files
+
     compile project(':jokelib')
     compile project(':jokedroid')
     compile project(path: ':backend', configuration: 'android-endpoints')
@@ -48,4 +53,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-ads:10.0.1'
     compile 'com.google.code.findbugs:jsr305:2.0.1'
     compile 'com.android.support:support-v4:25.1.1'
+    compile 'com.android.support:design:25.1.1'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:1.10.19'
 }
