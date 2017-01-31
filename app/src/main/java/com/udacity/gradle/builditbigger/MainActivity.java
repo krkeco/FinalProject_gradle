@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "Manfred"));
 
     }
 
@@ -62,9 +61,12 @@ public class MainActivity extends AppCompatActivity {
         String joke = jokelib.getJoke();
         Toast.makeText(this, joke, Toast.LENGTH_SHORT).show();
 
+        new EndpointsAsyncTask().execute(new Pair<Context, String>(this, joke));
+
+        /*prior to gcm this sent the data to the androidlib for display
         Intent intent = new Intent(MainActivity.this, JokeDroidActivity.class);
         intent.putExtra("joke",joke);
-        MainActivity.this.startActivity(intent);
+        MainActivity.this.startActivity(intent);*/
 
     }
     class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> {
@@ -75,12 +77,13 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(Pair<Context, String>... params) {
             if(myApiService == null) {  // Only do this once
                 Log.v("krkeco","making myapiservice");
+
                 MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                         new AndroidJsonFactory(), null)
                         // options for running against local devappserver
                         // - 10.0.2.2 is localhost's IP address in Android emulator
                         // - turn off compression when running against local devappserver
-                        .setRootUrl("http://10.0.2.2:8080/_ah/api/")
+                        .setRootUrl("http://192.168.43.39:8080/_ah/api/")
                         .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
                             @Override
                             public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
@@ -96,18 +99,18 @@ public class MainActivity extends AppCompatActivity {
             String name = params[0].second;
 
             try {
-                Log.v("krkeco","got through the connection?");
                 return myApiService.sayHi(name).execute().getData();
             } catch (IOException e) {
-                Log.v("krkeco",e.getMessage()+" error");
                 return e.getMessage();
             }
         }
 
         @Override
         protected void onPostExecute(String result) {
-            Log.v("krkeco","we have a text!: "+result);
-            Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+        //    Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(MainActivity.this, JokeDroidActivity.class);
+            intent.putExtra("joke",result);
+            MainActivity.this.startActivity(intent);
         }
     }
 }
