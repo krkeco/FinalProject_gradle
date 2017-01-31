@@ -73,10 +73,6 @@ public class MainActivity extends AppCompatActivity {
 
         new EndpointsAsyncTask().execute(new Pair<Context, String>(this, joke));
 
-        /*prior to gcm this sent the data to the androidlib for display
-        Intent intent = new Intent(MainActivity.this, JokeDroidActivity.class);
-        intent.putExtra("joke",joke);
-        MainActivity.this.startActivity(intent);*/
 
     }
 
