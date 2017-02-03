@@ -9,7 +9,6 @@ import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.JokePro;
 import com.example.jokedroid.JokeDroidActivity;
@@ -73,16 +72,19 @@ public class MainActivity extends AppCompatActivity {
         tellJoke(joke);
     }
 
-    public void tellJoke(String joke){
-        Toast.makeText(this, joke, Toast.LENGTH_SHORT).show();
+    public static void tellJoke(String joke){
+     //   Toast.makeText(mContext, joke, Toast.LENGTH_SHORT).show();
 
-        new EndpointsAsyncTask().execute(new Pair<Context, String>(this, joke));
+        new EndpointsAsyncTask().execute(new Pair<Context, String>(mContext, joke));
 
     }
 
+
+    public static String test = null;
     public static void receiveData(String result){
         Intent intent = new Intent(mContext, JokeDroidActivity.class);
         intent.putExtra("joke",result);
+        test = result;
         mContext.startActivity(intent.addFlags(FLAG_ACTIVITY_NEW_TASK));
 
     }

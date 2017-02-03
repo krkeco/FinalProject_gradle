@@ -1,8 +1,10 @@
 package com.udacity.gradle.builditbigger;
 
 import android.content.Context;
+import android.os.Looper;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Pair;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,9 +21,12 @@ public class ExampleInstrumentedTest {
 
     @Test
     public void useASyncTask() {
-        Context appContext = InstrumentationRegistry.getTargetContext();
-      //  epasync = new EndpointsAsyncTask();
-        assertNotNull(new EndpointsAsyncTask());
+        Context mContext = InstrumentationRegistry.getTargetContext();
+        //Activity main = new MainActivity();
+        Looper.prepare();
+
+        assertNotNull(
+                new EndpointsAsyncTask().execute(new Pair<Context, String>(mContext, "hi")));
 
     }
 }
